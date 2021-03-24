@@ -88,7 +88,7 @@
 </template>
 <script type="text/ecmascript-6">
 export default {
-  name: 'Sinup',
+  layout:"custom",
   data () {
     var validateAccount = (rule, value, callback) => {
       this.form.disableVerify = true

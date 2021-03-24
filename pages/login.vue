@@ -161,6 +161,7 @@
 
 <script>
 export default {
+  layout:"custom",
   data () {
     var validateAccount = (rule, value, callback) => {
       if (value === '') {
