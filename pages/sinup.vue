@@ -1,6 +1,6 @@
 <template>
   <div class="background">
-    <div style="width:500px; margin:130px auto;background-color:white">
+    <div style="width:500px;height:550px; background-color:white" class="main">
       <div style="margin:auto;width:400px">
         <div class="logintitle">
           <span>到&nbsp;云</span>
@@ -84,10 +84,22 @@
         </el-form>
       </div>
     </div>
+    <div class="footer">
+    <p>
+        ©Copyright 2021 22小组lhw
+    </p>
+    </div>
+    <particlesJS/>
   </div>
 </template>
 <script type="text/ecmascript-6">
+import particlesJS from '@/components/ParticlesJS.vue'
+
 export default {
+  components: {
+    particlesJS
+    
+  },
   layout:"custom",
   data () {
     var validateAccount = (rule, value, callback) => {
@@ -227,18 +239,34 @@ export default {
 .background {
   width: 100%;
   height: 100%;
-  background-image: url("~@/assets/login/background.jpg");
-
-  background-size: cover; /* 使图片平铺满整个浏览器（从宽和高的最大需求方面来满足，会使某些部分无法显示在区域中） */
+  background-image: url("~@/assets/login/background.jpg"); 
+  background-size: 100% 100%; /* 使图片平铺满整个浏览器（从宽和高的最大需求方面来满足，会使某些部分无法显示在区域中） */
   position: absolute; /* 不可缺少 */
-  z-index: -1;
+  z-index: 1;
   background-repeat: no-repeat;
-  /* overflow: hidden; */
+  overflow: hidden;
+}
+
+.main {
+  margin:8% auto;
+  position: absolute;  
+  top: 0; left: 0; bottom: 0; right: 0;    
+  box-shadow:0px 15px 10px -15px #000;
 }
 .logintitle {
   color: rgb(83, 168, 255);
   font-size: 40px;
   text-align: center;
   padding-top: 30px;
+}
+
+.footer{
+
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+  color:rgb(255, 255, 255);
+
 }
 </style>

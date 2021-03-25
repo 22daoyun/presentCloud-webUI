@@ -14,10 +14,12 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "canvas-nest.js": "^2.0.4",
     "element-ui": "^2.15.1",
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "particles.js": "^2.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",

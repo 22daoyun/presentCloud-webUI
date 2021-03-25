@@ -6,7 +6,7 @@
         <i class="el-icon-cloudy"></i>
           到云后台管理系统
         
-          <!-- <img src="" alt /> -->
+           <!-- <img src="@/assets/logo.png" width="250px" height="60px" alt />  -->
         </nuxt-link>
       </div>
 

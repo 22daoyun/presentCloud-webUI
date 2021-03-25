@@ -1,6 +1,8 @@
+
 <template>
+
   <div class="background">
-    <div style="width:500px; margin:auto;">
+    <div style="width:500px; margin:auto;" class="main">
       <el-tabs
         v-model="activeName"
         type="border-card"
@@ -155,12 +157,26 @@
         </el-tab-pane>
 
       </el-tabs>
+      
     </div>
-  </div>
+    <div class="footer">
+    <p>
+        ©Copyright 2021 22小组lhw
+    </p>
+    </div>
+  
+  <particlesJS/>
+</div>
 </template>
 
 <script>
+
+import particlesJS from '@/components/ParticlesJS.vue'
 export default {
+  components: {
+    particlesJS
+  },
+  
   layout:"custom",
   data () {
     var validateAccount = (rule, value, callback) => {
@@ -344,19 +360,35 @@ export default {
   // 初始化页面完成后,再对dom节点进行相关操作
   mounted () {}
 }
+
+
+
 </script>
 
 <style scoped>
+/* .wrap {
+    height: 100vh;
+    background-image: url("~@/assets/login/background.jpg");
+    background-size: 100% 100%;
+    overflow: hidden;
+    z-index: -2;
+    position: relative;
+  } */
 
 .background {
   width: 100%;
   height: 100%;
-  background-image: url("~@/assets/login/background.jpg");
-  background-size: cover; /* 使图片平铺满整个浏览器（从宽和高的最大需求方面来满足，会使某些部分无法显示在区域中） */
+  background-image: url("~@/assets/login/background.jpg"); 
+  background-size: 100% 100%; /* 使图片平铺满整个浏览器（从宽和高的最大需求方面来满足，会使某些部分无法显示在区域中） */
   position: absolute; /* 不可缺少 */
-  z-index: -1;
+  z-index: 1;
   background-repeat: no-repeat;
-  /* overflow: hidden; */
+  overflow: hidden;
+}
+
+.main {
+  position: absolute;  
+  top: 0; left: 0; bottom: 0; right: 0;  
 }
 
 .logintitle {
@@ -365,4 +397,14 @@ export default {
   text-align: center;
   margin: 20px;
 }
+.footer{
+
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+  color:rgb(255, 255, 255);
+
+}
+
 </style>

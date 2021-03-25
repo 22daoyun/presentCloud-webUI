@@ -54,6 +54,11 @@
     </el-menu>
   
 </el-row>
+<div class="footer">
+    <p>
+        ©Copyright 2021 22小组
+    </p>
+    </div>
 </div>
 </template>
 
@@ -71,5 +76,13 @@
 </script>
 
 <style>
+.footer{
 
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  color:rgb(141, 139, 139);
+
+}
 </style>
