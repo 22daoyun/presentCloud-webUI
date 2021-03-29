@@ -1,5 +1,8 @@
 # daoyun
 
+列表页：/pages/**/index.vue
+编辑页：/pages/**/create.vue
+
 > Nuxt.js project
 
 ## Build Setup
