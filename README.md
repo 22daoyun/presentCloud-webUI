@@ -1,7 +1,5 @@
 # daoyun
 
-列表页：/pages/**/index.vue
-编辑页：/pages/**/create.vue
 
 > Nuxt.js project
 
@@ -21,6 +19,9 @@ $ npm start
 # generate static project
 $ npm run generate
 ```
+HTTP拦截器文件：/plugins/axios-plugin.js
+列表页：/pages/class/index.vue
+编辑页：/pages/class/create.vue
 
 For detailed explanation on how things work, checkout the [Nuxt.js docs](https://github.com/nuxt/nuxt.js).
 
