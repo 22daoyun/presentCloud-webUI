@@ -24,7 +24,9 @@ module.exports = {
     'element-ui/lib/theme-chalk/index.css'
   ],
   plugins: [
-    {src: '~/plugins/ElementUI', ssr: true }
+    {src: '~/plugins/ElementUI', ssr: true },
+    {src:'~/plugins/axios-plugin'},
+    {src: "~/plugins/localStorage", ssr: false },
   ],
   build: {
     vendor: ['element-ui']
@@ -48,7 +50,41 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
+    },
+    extend(config,ctx){
+      　　config.node = {
+      　　　　fs:"empty"
+      　　}
+      }
+      
+  },
+
+   
+  modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy',
+    "cookie-universal-nuxt",
+    ["cookie-universal-nuxt", { alias: "cookiz" }]
+  ],
+  axios: {
+      proxy: true, // 表示开启代理
+      //prefix: '/api', // 表示给请求url加个前缀 /api
+      // browserBaseURL: "http://49.235.70.189:8080",
+      credentials: true // 表示跨域请求时是否需要使用凭证
+  },
+  proxy: {
+    '/api': {
+      target: 'http://49.235.70.189:8080/', // 目标接口域名
+      changeOrigin: true, // 表示是否跨域
+      pathRewrite: {
+        '^/api': '/', // 把 /api 替换成 /
+      }
     }
   }
+
+
+
+
+
 }
 

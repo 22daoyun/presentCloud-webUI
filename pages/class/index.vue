@@ -1,6 +1,10 @@
 <template>
   <div>
-    This is class.
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>班课管理</el-breadcrumb-item>
+      <el-breadcrumb-item>查看班课</el-breadcrumb-item>
+   </el-breadcrumb>
   </div>
 </template>
 <script type="text/ecmascript-6">

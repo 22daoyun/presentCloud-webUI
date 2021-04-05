@@ -2,12 +2,7 @@
   <div class="header">
     <el-row type="flex" justify="space-between" class="main">
       <div class="logo">
-        <nuxt-link to="/">
-        <i class="el-icon-cloudy"></i>
-          到云后台管理系统
-        
-           <!-- <img src="@/assets/logo.png" width="250px" height="60px" alt />  -->
-        </nuxt-link>
+            <h3>到云后台管理系统</h3>
       </div>
 
       <el-row type="flex" class="navs">
@@ -20,13 +15,15 @@
         <nuxt-link to="/data">数据字典</nuxt-link>
         <nuxt-link to="/setting">参数设置</nuxt-link> -->
       </el-row>
+
+    
       
       <el-dropdown style="margin:0 120px">
         
         <span class="el-dropdown-link">
           <i class="el-icon-user"></i>
           
-          个人信息
+          个人中心
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
@@ -69,14 +66,12 @@ export default {
   .main {
     width: 100%;
     margin: 0 auto ;
-    .logo {
-      width: 200px;
-      margin:0  auto;
-      text-align: center;
-      img {
-         display: block;
-      }
-    }
+    .logo{
+                color:#7d7d7d;
+                float: left;
+                font-size: 23px;
+                margin-left: 20px;
+            }
   }
 
   .navs {

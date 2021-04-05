@@ -120,7 +120,7 @@ export default {
       form: {
         phone: '',
         phone_password: '',
-
+        need_vercode: '',
         verification: '', // 验证码
         disableVerify: true, // 能否发送
         showVerify: true, // 显示按钮
@@ -140,9 +140,79 @@ export default {
     }
   },
   methods: {
+    // async sendMessage(phone,confirm) {
+		// 		console.log("{\"code\":\""+confirm +"\"}")
+		// 		console.log('phone',phone)
+		// 		const Core = require('@alicloud/pop-core');
+
+		// 		var client = new Core({
+		// 			accessKeyId: 'LTAI4GEjqfdgxRrXxP1J8XMu',
+		// 			accessKeySecret: '9hBLWGMkzhLPBShyndVciS8eIMPnu9',
+		// 			endpoint: 'https://dysmsapi.aliyuncs.com',
+		// 			apiVersion: '2017-05-25'
+		// 		});
+
+		// 		var params = {
+		// 			"PhoneNumbers": phone,
+		// 			"SignName": "lzh生意专家",
+		// 			"TemplateCode": "SMS_205132359",
+		// 			"TemplateParam": "{\"code\":\""+confirm+"\"}"
+		// 		}
+
+		// 		var requestOption = {
+		// 			method: 'POST'
+		// 		};
+
+		// 		client.request('SendSms', params, requestOption).then((result) => {
+		// 			console.log(JSON.stringify(result));
+		// 		}, (ex) => {
+		// 			console.log(ex);
+		// 		})
+		// 	},
+
     getVerification () {
 
-      this.form.verification = '1234'
+      // this.form.need_vercode = ('0000' + String(parseInt(Math.random() * (10000)))).slice(-4);
+			// this.sendMessage(this.form.phone,this.form.need_vercode)
+
+      try {
+            const _this = this;
+            var qs = require("qs");
+            
+            this.$axios
+              .post("/user/create", 
+                qs.stringify({
+                  username: this.form.phone,
+                  password: this.form.phone_password,
+                })
+              )
+              .then(res => {
+                console.log(res);
+                if (res.code !== 0) {
+                this.$message({
+                  message: res.data.msg,
+                  type: "error"
+                    });
+                  } else {
+                    this.$message({
+                      message: "登陆成功",
+                      type: "success"
+                    });
+
+                    // window.localStorage.setItem("sid", res.token,60*60*24*10);
+                    _local.set("sid", res.token,60*60*24*10*1000);
+                    // this.$cookies.set("sid", res.token, "60s");
+                    // console.log(this.$cookies.get("sid"));
+                    this.$router.push("/");
+               
+                  }
+              })
+              .catch(e => {
+                console.log(e);
+              });
+          } catch (e) {
+            console.log(e);
+          }
 
       const TIME_COUNT = 60
       if (!this.timer) {
@@ -164,6 +234,8 @@ export default {
         if (valid) {
           // TODO：获取验证码
 
+
+
           if (this.form.verification == '') {
             console.log('请输入验证码')
             this.$message({
@@ -172,7 +244,7 @@ export default {
               type: 'error'
             })
             return false
-          } else if (this.form.verification != '1234') {
+          } else if (this.form.verification != this.form.need_vercode) {
             console.log('请输入正确的验证码')
             this.$message({
               showClose: true,
@@ -181,7 +253,7 @@ export default {
             })
             return false
           } else if (this.form.agree !== true) {
-            console.log('请输入正确的验证码')
+            console.log('请阅读并同意《用户协议》')
             this.$message({
               showClose: true,
               message: '请阅读并同意《用户协议》',
@@ -191,38 +263,38 @@ export default {
           }
 
           try {
-            const _this = this
-            this.$axios.post(this.$serverUrl + '/api/sinup', {
-              phone: this.form.phone,
-              phone_password: this.form.phone_password,
-              create_time: this.$formatDate(new Date().getTime())
-            })
-              .then(function (response) {
-                console.log(response)
-                if (response.data.user_id === -1) {
-                  console.log('phone already exist')
-                  _this.$message({
-                    showClose: true,
-                    message: '该手机号已注册，请登录或更换手机号',
-                    type: 'error'
-                  })
-                } else {
-                  // 注册成功
-                  console.log('user_id:' + response.data.user_id)
+            // const _this = this
+            // this.$axios.post('/sinup', {
+            //   phone: this.form.phone,
+            //   phone_password: this.form.phone_password,
+            //   // create_time: this.$formatDate(new Date().getTime())
+            // })
+            //   .then(function (response) {
+            //     console.log(response)
+            //     if (response.data.user_id == -1) {
+            //       console.log('phone already exist')
+            //       _this.$message({
+            //         showClose: true,
+            //         message: '该手机号已注册，请登录或更换手机号',
+            //         type: 'error'
+            //       })
+            //     } else {
+            //       // 注册成功
+            //       console.log('user_id:' + response.data.user_id)
 
-                  let token = {
-                    'user_id': response.data.user_id,
-                    'loginTime': new Date().getTime(),
-                    'autoLogin': true
-                  }
-                  _this.$store.commit('LOGIN_IN', token)
-                  console.log(_this.$store.state.UserToken)
-                  _this.$router.push("/")
-                }
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
+            //       let token = {
+            //         'user_id': response.data.user_id,
+            //         'loginTime': new Date().getTime(),
+            //         'autoLogin': true
+            //       }
+            //       _this.$store.commit('LOGIN_IN', token)
+            //       console.log(_this.$store.state.UserToken)
+            //       _this.$router.push("/")
+            //     }
+            //   })
+            //   .catch(function (error) {
+            //     console.log(error)
+            //   })
           } catch (e) {
             console.log(e)
           }

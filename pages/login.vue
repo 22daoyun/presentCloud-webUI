@@ -15,7 +15,7 @@
             <span>到&nbsp;云</span>
           </div>
 
-          <el-form ref="form" :model="formPsd" :rules="Psdrules" label-width="80px">
+          <el-form ref="formPsd" :model="formPsd" :rules="Psdrules" label-width="80px">
 
             <el-form-item label="账号" prop="account">
               <el-autocomplete
@@ -59,7 +59,7 @@
               <div>
                  <el-button
                   type="primary"
-                  @click="submitForm('form')"
+                  @click="submitForm1('formPsd')"
                   style="width:300px"
                   >登录</el-button>
               </div>
@@ -73,6 +73,10 @@
               </div>
             </el-form-item>
           </el-form>
+         
+              
+           
+
         </el-tab-pane>
 
         <el-tab-pane label="短信验证登录" name="second">
@@ -80,7 +84,7 @@
             <span>到&nbsp;云</span>
           </div>
 
-         <el-form ref="form" :model="formPhone" :rules="Phonerules" label-width="80px">
+         <el-form ref="formPhone" :model="formPhone" :rules="Phonerules" label-width="80px">
           <el-form-item label="手机" prop="phone">
             <el-input
               v-model="formPhone.phone"
@@ -138,7 +142,7 @@
               <div>
                 <el-button
                   type="primary"
-                  @click="submitForm('form')"
+                  @click="submitForm2('formPhone')"
                   style="width:300px"
                   >登录</el-button
                 >
@@ -180,11 +184,11 @@ export default {
   layout:"custom",
   data () {
     var validateAccount = (rule, value, callback) => {
-      if (value === '') {
+      if (value == '') {
         callback(new Error('请输入手机号/邮箱'))
-      } else if (value.indexOf('@') !== -1) {
+      } else if (value.indexOf('@') != -1) {
         // 邮箱
-        this.formPsd.way = 'email'
+        // this.formPsd.way = 'email'
         var reg = /^([a-zA-Z]|[0-9])(\w|-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
         if (!reg.test(value)) {
           callback(new Error('手机号/邮箱格式有误，请重填!'))
@@ -193,7 +197,7 @@ export default {
         }
       } else {
         // 手机
-        this.formPsd.way = 'phone'
+        // this.formPsd.way = 'phone'
         if (!/^1[3456789]\d{9}$/.test(value)) {
           callback(new Error('手机号/邮箱格式有误，请重填'))
         } else {
@@ -203,7 +207,7 @@ export default {
     }
     var validatePhone = (rule, value, callback) => {
       this.formPhone.disableVerify = true
-      if (value === '') {
+      if (value == '') {
         callback(new Error('请输入手机号'))
       } else {
         // 手机
@@ -211,6 +215,7 @@ export default {
           callback(new Error('手机号格式有误，请重填'))
         } else {
           this.formPhone.disableVerify = false
+          
           callback()
         }
       }
@@ -220,10 +225,11 @@ export default {
       // TODO:保存到localStorage
       accountHistory: [],
       formPsd: {
-        account: '',
-        password: '',
-        way: '',
+
+        account: "15659197520",
+        password: "123456",
         autoLogin: false
+
       },
       Psdrules: {
         account: [{ validator: validateAccount, trigger: 'blur' }],
@@ -252,7 +258,7 @@ export default {
   },
   methods: {
     getVerification () {
-      this.formPhone.verification = '1234'
+       this.formPhone.verification = '1234'
 
       const TIME_COUNT = 60
       if (!this.timer) {
@@ -295,73 +301,145 @@ export default {
       console.log(item)
     },
 
-    submitForm (formName) {
-      // this.$refs[formName].validate(valid => {
-      //   if (valid) {
-      //     try {
-      //       const _this = this;
-      //       this.$axios
-      //         .post(this.$serverUrl + "/api/login", {
-      //           way: this.form.way,
-      //           // account:'13111111111',
-      //           // password:'admin',
-      //           account: this.form.account,
-      //           password: this.form.password
-      //         })
-      //         .then(function(response) {
-      //           console.log(response);
-      //           if (response.data.user_id == -1) {
-      //             console.log("account error");
-      //             _this.$message({
-      //               showClose: true,
-      //               message: "账号不存在",
-      //               type: "error"
-      //             });
-      //           } else if (response.data.user_id == -2) {
-      //             console.log("password error");
-      //             _this.$message({
-      //               showClose: true,
-      //               message: "密码错误",
-      //               type: "error"
-      //             });
-      //           } else {
-      //             // 登录成功
-      //             console.log("user_id:" + response.data.user_id);
+    submitForm1 (formName) {
 
-      //             let token = {
-      //               user_id: response.data.user_id,
-      //               loginTime: new Date().getTime(),
-      //               autoLogin: _this.form.autoLogin
-      //             };
-      //             _this.$store.commit("LOGIN_IN", token);
-      //             console.log(_this.$store.state.UserToken);
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          try {
+            const _this = this;
+            var qs = require("qs");
+            
+            this.$axios
+              .post("/login", 
+                qs.stringify({
+                  account: this.formPsd.account,
+                  password: this.formPsd.password,
+                })
+              )
+              .then(res => {
+                console.log(res);
+                if (res.code !== 0) {
+                this.$message({
+                  message: res.data.msg,
+                  type: "error"
+                    });
+                  } else {
+                    this.$message({
+                      message: "登陆成功",
+                      type: "success"
+                    });
 
-      //             _this.$router.replace("/"); // 不会留下 history 记录
-      //             //_this.$router.push('/');   // 向 history 栈添加一个新的记录
-      //             //this.$router.go(-1);   // 后退一步记录，等同于 history.back()
-      //             //this.$router.go(1);   // 在浏览器记录中前进一步，等同于 history.forward()
-      //           }
-      //         })
-      //         .catch(function(error) {
-      //           console.log(error);
-      //         });
-      //     } catch (e) {
-      //       console.log(e);
-      //     }
+                    // window.localStorage.setItem("sid", res.token,60*60*24*10);
+                    _local.set("sid", res.token,60*60*24*10*1000);
+                    // this.$cookies.set("sid", res.token, "60s");
+                    // console.log(this.$cookies.get("sid"));
+                    this.$router.push("/");
+               
+                  }
+              })
+              .catch(e => {
+                console.log(e);
+              });
+          } catch (e) {
+            console.log(e);
+          }
 
-      //     // alert('submit!');
-      //   } else {
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
-    }
-  },
-  // 初始化页面完成后,再对dom节点进行相关操作
-  mounted () {}
+          // alert('submit!');
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+
+
+    submitForm2 (formName){
+     this.$refs[formName].validate(valid => {
+        if (valid) {
+
+          if(this.formPhone.verification == ''){
+              console.log('请输入验证码');
+              this.$message({
+                showClose: true,
+                message: '请输入验证码',
+                type: 'error'
+              });
+              return false;
+            }
+            // else if(this.formPhone.verification != '1234'){
+            //   console.log('请输入正确的验证码');
+            //   this.$message({
+            //     showClose: true,
+            //     message: '请输入正确的验证码',
+            //     type: 'error'
+            //   });
+            //   return false;
+            // }
+
+            try {
+            const _this = this;
+            this.$axios
+              .post(this.$serverUrl + "/api/login", {
+                
+                phone: this.formPhone.phone,
+                verification: this.formPhone.verification
+              })
+              .then(function(response) {
+                console.log(response);
+                if (response.data.user_id == -1) {
+                  console.log("account error");
+                  _this.$message({
+                    showClose: true,
+                    message: "账号不存在",
+                    type: "error"
+                  });
+                } else if (response.data.user_id == -2) {
+                  console.log("verfication error");
+                  _this.$message({
+                    showClose: true,
+                    message: "验证码错误",
+                    type: "error"
+                  });
+                } else {
+                  // 登录成功
+                  console.log("user_id:" + response.data.user_id);
+
+                  let token = {
+                    user_id: response.data.user_id,
+                    loginTime: new Date().getTime(),
+                    autoLogin: _this.form.autoLogin
+                  };
+                  _this.$store.commit("LOGIN_IN", token);
+                  console.log(_this.$store.state.UserToken);
+
+                  _this.$router.replace("/"); // 不会留下 history 记录
+                  //_this.$router.push('/');   // 向 history 栈添加一个新的记录
+                  //this.$router.go(-1);   // 后退一步记录，等同于 history.back()
+                  //this.$router.go(1);   // 在浏览器记录中前进一步，等同于 history.forward()
+                }
+              })
+              .catch(function(error) {
+                console.log(error);
+              });
+          } catch (e) {
+            console.log(e);
+          }
+
+
+        }else {
+          console.log("error submit!!");
+          return false;
+        }
+     })
+     },
+
+
+  
+     // 初始化页面完成后,再对dom节点进行相关操作
+    mounted () {}
 }
 
-
+}
 
 </script>
 
