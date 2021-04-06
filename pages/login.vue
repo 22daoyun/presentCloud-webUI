@@ -318,6 +318,7 @@ export default {
               )
               .then(res => {
                 console.log(res);
+                
                 if (res.code !== 0) {
                 this.$message({
                   message: res.data.msg,
