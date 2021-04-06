@@ -118,7 +118,7 @@ export default {
     }
     return {
       form: {
-        phone: '',
+        phone: '15659197520',
         phone_password: '',
         need_vercode: '',
         verification: '', // 验证码
@@ -180,30 +180,31 @@ export default {
             var qs = require("qs");
             
             this.$axios
-              .post("/user/create", 
+              .post("/getCode", 
                 qs.stringify({
-                  username: this.form.phone,
-                  password: this.form.phone_password,
+                  telephoneNumber: this.form.phone,
+                  // password: this.form.phone_password,
                 })
               )
               .then(res => {
                 console.log(res);
-                if (res.code !== 0) {
+                console.log(res.data);
+                if (!res.data ) {
                 this.$message({
                   message: res.data.msg,
                   type: "error"
                     });
                   } else {
                     this.$message({
-                      message: "登陆成功",
+                      message: "已发送验证码",
                       type: "success"
                     });
 
                     // window.localStorage.setItem("sid", res.token,60*60*24*10);
-                    _local.set("sid", res.token,60*60*24*10*1000);
+                    // _local.set("sid", res.token,60*60*24*10*1000);
                     // this.$cookies.set("sid", res.token, "60s");
                     // console.log(this.$cookies.get("sid"));
-                    this.$router.push("/");
+                    // this.$router.push("/");
                
                   }
               })
@@ -229,12 +230,11 @@ export default {
         }, 1000)
       }
     },
+
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // TODO：获取验证码
-
-
 
           if (this.form.verification == '') {
             console.log('请输入验证码')
@@ -244,15 +244,17 @@ export default {
               type: 'error'
             })
             return false
-          } else if (this.form.verification != this.form.need_vercode) {
-            console.log('请输入正确的验证码')
-            this.$message({
-              showClose: true,
-              message: '请输入正确的验证码',
-              type: 'error'
-            })
-            return false
-          } else if (this.form.agree !== true) {
+          } 
+          // else if (this.form.verification != this.form.need_vercode) {
+          //   console.log('请输入正确的验证码')
+          //   this.$message({
+          //     showClose: true,
+          //     message: '请输入正确的验证码',
+          //     type: 'error'
+          //   })
+          //   return false
+          //}
+           else if (this.form.agree !== true) {
             console.log('请阅读并同意《用户协议》')
             this.$message({
               showClose: true,
@@ -263,50 +265,58 @@ export default {
           }
 
           try {
-            // const _this = this
-            // this.$axios.post('/sinup', {
-            //   phone: this.form.phone,
-            //   phone_password: this.form.phone_password,
-            //   // create_time: this.$formatDate(new Date().getTime())
-            // })
-            //   .then(function (response) {
-            //     console.log(response)
-            //     if (response.data.user_id == -1) {
-            //       console.log('phone already exist')
-            //       _this.$message({
-            //         showClose: true,
-            //         message: '该手机号已注册，请登录或更换手机号',
-            //         type: 'error'
-            //       })
-            //     } else {
-            //       // 注册成功
-            //       console.log('user_id:' + response.data.user_id)
+            const _this = this;
+            var qs = require("qs");
+            
+            this.$axios
+              .post("/register", 
+                qs.stringify({
+                  user:{
+                    tel: this.form.phone,
+                    password: this.form.phone_password},
+                  checkNumber:this.form.verification
+                })
+              )
+              .then(res => {
+                console.log(res);
+                
+                if (res.data.code != 0) {
+                this.$message({
+                  message: res.data.msg,
+                  type: "error"
+                    });
+                  } else {
+                    this.$message({
+                      message: "登陆成功",
+                      type: "success"
+                    });
 
-            //       let token = {
-            //         'user_id': response.data.user_id,
-            //         'loginTime': new Date().getTime(),
-            //         'autoLogin': true
-            //       }
-            //       _this.$store.commit('LOGIN_IN', token)
-            //       console.log(_this.$store.state.UserToken)
-            //       _this.$router.push("/")
-            //     }
-            //   })
-            //   .catch(function (error) {
-            //     console.log(error)
-            //   })
+                    // window.localStorage.setItem("sid", res.token,60*60*24*10);
+                    //_local.set("sid", res.data.token,60*60*24*10*1000);
+                    // this.$cookies.set("sid", res.token, "60s");
+                    // console.log(this.$cookies.get("sid"));
+                    //console.log(_local.get("sid"));
+                    //this.$router.push("/");
+               
+                  }
+              })
+              .catch(e => {
+                console.log(e);
+              });
           } catch (e) {
-            console.log(e)
+            console.log(e);
           }
-        } else {
-          console.log('error submit!!')
-          return false
+      }else {
+          console.log("error submit!!");
+          return false;
         }
-      })
+       })
+    
     }
   }
 }
 </script>
+
 <style scoped>
 .background {
   width: 100%;

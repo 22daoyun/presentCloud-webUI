@@ -69,7 +69,7 @@ module.exports = {
   axios: {
       proxy: true, // 表示开启代理
       //prefix: '/api', // 表示给请求url加个前缀 /api
-      // browserBaseURL: "http://49.235.70.189:8080",
+      browserBaseURL: "http://49.235.70.189:8080",
       credentials: true // 表示跨域请求时是否需要使用凭证
   },
   proxy: {

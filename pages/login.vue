@@ -176,6 +176,7 @@
 <script>
 
 import particlesJS from '@/components/ParticlesJS.vue'
+import _local from '@/plugins/localStorage'
 export default {
   components: {
     particlesJS
@@ -318,7 +319,8 @@ export default {
               )
               .then(res => {
                 console.log(res);
-                if (res.code !== 0) {
+                
+                if (res.data.code !== 0) {
                 this.$message({
                   message: res.data.msg,
                   type: "error"
@@ -330,7 +332,7 @@ export default {
                     });
 
                     // window.localStorage.setItem("sid", res.token,60*60*24*10);
-                    _local.set("sid", res.token,60*60*24*10*1000);
+                    _local.set("sid", res.data.token,60*60*24*10*1000);
                     // this.$cookies.set("sid", res.token, "60s");
                     // console.log(this.$cookies.get("sid"));
                     this.$router.push("/");
