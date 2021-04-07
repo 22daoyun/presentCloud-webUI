@@ -227,7 +227,7 @@ export default {
       accountHistory: [],
       formPsd: {
 
-        account: "15659197520",
+        account: "15567678989",
         password: "123456",
         autoLogin: false
 
@@ -259,7 +259,7 @@ export default {
   },
   methods: {
     getVerification () {
-       this.formPhone.verification = '1234'
+       this.formPhone.verification = ''
 
       const TIME_COUNT = 60
       if (!this.timer) {
@@ -327,7 +327,7 @@ export default {
                     });
                   } else {
                     this.$message({
-                      message: "登陆成功",
+                      message: res.data.msg,
                       type: "success"
                     });
 

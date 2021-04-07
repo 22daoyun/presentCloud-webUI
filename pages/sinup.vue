@@ -268,12 +268,11 @@ export default {
             const _this = this;
             var qs = require("qs");
             
-            this.$axios
-              .post("/register", 
+            this.$axios.post("/register", 
                 qs.stringify({
-                  user:{
-                    tel: this.form.phone,
-                    password: this.form.phone_password},
+                 
+                  phone: this.form.phone,
+                  password: this.form.phone_password,
                   checkNumber:this.form.verification
                 })
               )
@@ -287,7 +286,7 @@ export default {
                     });
                   } else {
                     this.$message({
-                      message: "登陆成功",
+                      message: res.data.msg,
                       type: "success"
                     });
 
@@ -296,7 +295,7 @@ export default {
                     // this.$cookies.set("sid", res.token, "60s");
                     // console.log(this.$cookies.get("sid"));
                     //console.log(_local.get("sid"));
-                    //this.$router.push("/");
+                    this.$router.push("/login");
                
                   }
               })

@@ -8,6 +8,7 @@ export default({store, route, redirect, $axios}) => {
     const tokenStr=_local.get('sid')
     // 请求头添加token
      if (tokenStr) {
+      console.log("添加token");
        config.headers.Authorization = tokenStr;
      }
     // 用户端
@@ -29,27 +30,18 @@ export default({store, route, redirect, $axios}) => {
       const code = parseInt(error.response && error.response.status)      
     // switch (code) 分情况处理.
     switch (code) {
-              case 400:
-                error.message = "请求出错";
-                break;
-              case 401:
-                Message.warning({
-                  message: "授权失败，请重新登录"
-                });
-                // store.commit("LOGIN_OUT");
-                setTimeout(() => {
-                  window.location.reload();
-                }, 1000);
-      
-                return;
+              
               case 403:
                 error.message = "拒绝访问";
+                redirect("/errors/Error403");
                 break;
               case 404:
                 error.message = "请求错误,未找到该资源";
+                redirect("/errors/Error404");
                 break;
               case 500:
                 error.message = "服务器端出错";
+                redirect("/errors/Error500");
                 break;
             }
   })
