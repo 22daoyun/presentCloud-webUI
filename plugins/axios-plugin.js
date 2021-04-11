@@ -1,6 +1,6 @@
 import _local from '@/plugins/localStorage'
 import { Message } from "element-ui";
-export default({store, route, redirect, $axios}) => {
+export default({app,store, route, redirect, $axios}) => {
 
   $axios.onRequest(config => {
        console.log("请求拦截器")
@@ -9,9 +9,10 @@ export default({store, route, redirect, $axios}) => {
     // 请求头添加token
      if (tokenStr) {
       console.log("添加token");
-       config.headers.Authorization = tokenStr;
+     config.headers.Authorization = tokenStr;
      }
     // 用户端
+     
   }
 
     if (process.server) {
@@ -45,6 +46,7 @@ export default({store, route, redirect, $axios}) => {
                 break;
             }
   })
+
 
 }
 

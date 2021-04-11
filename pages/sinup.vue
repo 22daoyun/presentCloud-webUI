@@ -118,7 +118,7 @@ export default {
     }
     return {
       form: {
-        phone: '15659197520',
+        phone: '',
         phone_password: '',
         need_vercode: '',
         verification: '', // 验证码
@@ -130,7 +130,7 @@ export default {
       },
       rules: {
         phone: [
-          { validator: validateAccount, trigger: 'blur' }
+          { required: true,validator: validateAccount, trigger: 'blur' }
         ],
         phone_password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
@@ -182,19 +182,22 @@ export default {
             this.$axios
               .post("/getCode", 
                 qs.stringify({
-                  telephoneNumber: this.form.phone,
+                  phone: this.form.phone,
                   // password: this.form.phone_password,
                 })
               )
               .then(res => {
                 console.log(res);
-                console.log(res.data);
-                if (!res.data ) {
+                console.log(res.data.checkNumber);
+                
+                if (res.data.code != 0 ) {
                 this.$message({
                   message: res.data.msg,
                   type: "error"
                     });
                   } else {
+                    this.form.need_vercode = res.data.checkNumber;
+                    console.log(this.form.need_vercode);
                     this.$message({
                       message: "已发送验证码",
                       type: "success"
@@ -245,15 +248,15 @@ export default {
             })
             return false
           } 
-          // else if (this.form.verification != this.form.need_vercode) {
-          //   console.log('请输入正确的验证码')
-          //   this.$message({
-          //     showClose: true,
-          //     message: '请输入正确的验证码',
-          //     type: 'error'
-          //   })
-          //   return false
-          //}
+          else if (this.form.verification != this.form.need_vercode) {
+            console.log('请输入正确的验证码')
+            this.$message({
+              showClose: true,
+              message: '请输入正确的验证码',
+              type: 'error'
+            })
+            return false
+          }
            else if (this.form.agree !== true) {
             console.log('请阅读并同意《用户协议》')
             this.$message({

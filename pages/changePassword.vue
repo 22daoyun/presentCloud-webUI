@@ -185,30 +185,34 @@ export default {
             var qs = require("qs");
             
             this.$axios
-              .post("/user/create", 
+              .post("/getCode", 
                 qs.stringify({
-                  username: this.form.phone,
-                  password: this.form.phone_password,
+                  phone: this.form.phone,
+                  // password: this.form.phone_password,
                 })
               )
               .then(res => {
                 console.log(res);
-                if (res.code !== 0) {
+                console.log(res.data.checkNumber);
+                
+                if (res.data.code != 0 ) {
                 this.$message({
                   message: res.data.msg,
                   type: "error"
                     });
                   } else {
+                    this.form.need_vercode = res.data.checkNumber;
+                    console.log(this.form.need_vercode);
                     this.$message({
-                      message: "登陆成功",
+                      message: "已发送验证码",
                       type: "success"
                     });
 
                     // window.localStorage.setItem("sid", res.token,60*60*24*10);
-                    _local.set("sid", res.token,60*60*24*10*1000);
+                    // _local.set("sid", res.token,60*60*24*10*1000);
                     // this.$cookies.set("sid", res.token, "60s");
                     // console.log(this.$cookies.get("sid"));
-                    this.$router.push("/");
+                    // this.$router.push("/");
                
                   }
               })
@@ -257,51 +261,58 @@ export default {
               type: 'error'
             })
             return false
-          } else if (this.form.agree !== true) {
-            console.log('请阅读并同意《用户协议》')
+          } else if (this.form.newpassword !== this.form.repassword) {
+            console.log('两次密码不一致，请重新输入')
             this.$message({
               showClose: true,
-              message: '请阅读并同意《用户协议》',
+              message: '两次密码不一致，请重新输入',
               type: 'error'
             })
+            this.form.newpassword = '';
+            this.form.repassword = '';
             return false
           }
 
           try {
-            // const _this = this
-            // this.$axios.post('/sinup', {
-            //   phone: this.form.phone,
-            //   phone_password: this.form.phone_password,
-            //   // create_time: this.$formatDate(new Date().getTime())
-            // })
-            //   .then(function (response) {
-            //     console.log(response)
-            //     if (response.data.user_id == -1) {
-            //       console.log('phone already exist')
-            //       _this.$message({
-            //         showClose: true,
-            //         message: '该手机号已注册，请登录或更换手机号',
-            //         type: 'error'
-            //       })
-            //     } else {
-            //       // 注册成功
-            //       console.log('user_id:' + response.data.user_id)
+            const _this = this;
+            var qs = require("qs");
+            
+            this.$axios.post("/resetPasswordWithCode", 
+                qs.stringify({
+                 
+                  phone: this.form.phone,
+                  password: this.form.newpassword,
+                  checkNumber:this.form.verification
+                })
+              )
+              .then(res => {
+                console.log(res);
+                
+                if (res.data.code != 0) {
+                this.$message({
+                  message: res.data.msg,
+                  type: "error"
+                    });
+                  } else {
+                    this.$message({
+                      message: res.data.msg,
+                      type: "success"
+                    });
 
-            //       let token = {
-            //         'user_id': response.data.user_id,
-            //         'loginTime': new Date().getTime(),
-            //         'autoLogin': true
-            //       }
-            //       _this.$store.commit('LOGIN_IN', token)
-            //       console.log(_this.$store.state.UserToken)
-            //       _this.$router.push("/")
-            //     }
-            //   })
-            //   .catch(function (error) {
-            //     console.log(error)
-            //   })
+                    // window.localStorage.setItem("sid", res.token,60*60*24*10);
+                    //_local.set("sid", res.data.token,60*60*24*10*1000);
+                    // this.$cookies.set("sid", res.token, "60s");
+                    // console.log(this.$cookies.get("sid"));
+                    //console.log(_local.get("sid"));
+                    this.$router.push("/login");
+               
+                  }
+              })
+              .catch(e => {
+                console.log(e);
+              });
           } catch (e) {
-            console.log(e)
+            console.log(e);
           }
         } else {
           console.log('error submit!!')

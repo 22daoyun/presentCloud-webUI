@@ -227,7 +227,7 @@ export default {
       accountHistory: [],
       formPsd: {
 
-        account: "15567678989",
+        account: "15659197520",
         password: "123456",
         autoLogin: false
 
@@ -241,8 +241,9 @@ export default {
       },
 
       formPhone: {
-        phone: '',
+        phone: '15659197520',
         verification: '', // 验证码
+        need_vercode: '',
         disableVerify: true, // 能否发送
         showVerify: true, // 显示按钮
         countdown: 0,
@@ -259,7 +260,48 @@ export default {
   },
   methods: {
     getVerification () {
-       this.formPhone.verification = ''
+       try {
+            const _this = this;
+            var qs = require("qs");
+            
+            this.$axios
+              .post("/getCode", 
+                qs.stringify({
+                  phone: this.formPhone.phone,
+                  // password: this.form.phone_password,
+                })
+              )
+              .then(res => {
+                console.log(res);
+                console.log(res.data.checkNumber);
+                
+                if (res.data.code != 0 ) {
+                this.$message({
+                  message: res.data.msg,
+                  type: "error"
+                    });
+                  } else {
+                    this.formPhone.need_vercode = res.data.checkNumber;
+                    console.log(this.formPhone.need_vercode);
+                    this.$message({
+                      message: "已发送验证码",
+                      type: "success"
+                    });
+
+                    // window.localStorage.setItem("sid", res.token,60*60*24*10);
+                    // _local.set("sid", res.token,60*60*24*10*1000);
+                    // this.$cookies.set("sid", res.token, "60s");
+                    // console.log(this.$cookies.get("sid"));
+                    // this.$router.push("/");
+               
+                  }
+              })
+              .catch(e => {
+                console.log(e);
+              });
+          } catch (e) {
+            console.log(e);
+          }
 
       const TIME_COUNT = 60
       if (!this.timer) {
@@ -368,60 +410,52 @@ export default {
               });
               return false;
             }
-            // else if(this.formPhone.verification != '1234'){
-            //   console.log('请输入正确的验证码');
-            //   this.$message({
-            //     showClose: true,
-            //     message: '请输入正确的验证码',
-            //     type: 'error'
-            //   });
-            //   return false;
-            // }
+            else if(this.formPhone.verification != this.formPhone.need_vercode){
+              console.log('请输入正确的验证码');
+              this.$message({
+                showClose: true,
+                message: '请输入正确的验证码',
+                type: 'error'
+              });
+              return false;
+            }
 
             try {
             const _this = this;
+            var qs = require("qs");
+            
             this.$axios
-              .post(this.$serverUrl + "/api/login", {
+              .post("/phoneLogin", 
+                qs.stringify({
+                  phone: this.formPhone.phone,
+                  checkNumber: this.formPhone.verification,
+                })
+              )
+              .then(res => {
+                console.log(res);
                 
-                phone: this.formPhone.phone,
-                verification: this.formPhone.verification
-              })
-              .then(function(response) {
-                console.log(response);
-                if (response.data.user_id == -1) {
-                  console.log("account error");
-                  _this.$message({
-                    showClose: true,
-                    message: "账号不存在",
-                    type: "error"
-                  });
-                } else if (response.data.user_id == -2) {
-                  console.log("verfication error");
-                  _this.$message({
-                    showClose: true,
-                    message: "验证码错误",
-                    type: "error"
-                  });
-                } else {
-                  // 登录成功
-                  console.log("user_id:" + response.data.user_id);
+                if (res.data.code !== 0) {
+                this.$message({
+                  message: res.data.msg,
+                  type: "error"
+                    });
+                  } else {
+                    this.$message({
+                      message: res.data.msg,
+                      type: "success"
+                    });
 
-                  let token = {
-                    user_id: response.data.user_id,
-                    loginTime: new Date().getTime(),
-                    autoLogin: _this.form.autoLogin
-                  };
-                  _this.$store.commit("LOGIN_IN", token);
-                  console.log(_this.$store.state.UserToken);
-
-                  _this.$router.replace("/"); // 不会留下 history 记录
-                  //_this.$router.push('/');   // 向 history 栈添加一个新的记录
-                  //this.$router.go(-1);   // 后退一步记录，等同于 history.back()
-                  //this.$router.go(1);   // 在浏览器记录中前进一步，等同于 history.forward()
-                }
+                    // window.localStorage.setItem("sid", res.token,60*60*24*10);
+                    _local.set("sid", res.data.token,60*60*24*10*1000);
+                    console.log(res.data.token);
+                    // this.$cookies.set("sid", res.token, "60s");
+                    // console.log(this.$cookies.get("sid"));
+                    this.$router.push("/");
+               
+                  }
               })
-              .catch(function(error) {
-                console.log(error);
+              .catch(e => {
+                console.log(e);
               });
           } catch (e) {
             console.log(e);

@@ -24,7 +24,9 @@ module.exports = {
     'element-ui/lib/theme-chalk/index.css'
   ],
   plugins: [
+    "~plugins/vue-resource",
     {src: '~/plugins/ElementUI', ssr: true },
+    {src:'~/plugins/axios-plugin2'},
     {src:'~/plugins/axios-plugin'},
     {src: "~/plugins/localStorage", ssr: false },
   ],
@@ -70,7 +72,8 @@ module.exports = {
       proxy: true, // 表示开启代理
       //prefix: '/api', // 表示给请求url加个前缀 /api
       browserBaseURL: "http://49.235.70.189:8080",
-      credentials: true // 表示跨域请求时是否需要使用凭证
+      withCredentials: true,
+      // credentials: true // 表示跨域请求时是否需要使用凭证
   },
   proxy: {
     '/api': {
