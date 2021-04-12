@@ -11,12 +11,18 @@
         <div>
           <!-- 卡片视图区域 -->
           <el-card>
+            
             <!-- 搜索与添加区域 -->
             <el-row :gutter="20">
               <el-col :span="6">
                 <el-input placeholder="请输入内容" v-model="searchName" clearable @clear="getDataList">
                   <el-button slot="append" icon="el-icon-search" @click="getDataList"></el-button>
                 </el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button type="primary">
+                  <nuxt-link to="/data/createData">新增字典</nuxt-link>
+                </el-button>
               </el-col>
             </el-row>
             <br />
@@ -36,7 +42,7 @@
                     @click="showEditDialog(scope.row)"
                   ></el-button>
                   <!-- 删除按钮 -->
-                  <el-button type="danger" icon="el-icon-delete"></el-button>
+                  <el-button type="danger" icon="el-icon-delete" @click="delData(scope.row)"></el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -45,11 +51,12 @@
           <!-- 展示详情的对话框 -->
           <el-dialog
             :title="dataName"
-            :visible.sync="editDialogVisible"
+            :visible.sync="showDialogVisible"
             width="50%"
-            @close="editDialogClosed"
+            @close="showDialogClosed"
           >
-            <el-button type="success" @click="goEditPage">添加数据字典项</el-button>
+            <el-button type="success" @click="goEditPage1(dataid)">添加数据字典项</el-button>
+            <br />
             <br />
             <el-table :data="detail" border stripe>
               <!-- 索引列 -->
@@ -64,19 +71,46 @@
                   <el-button
                     type="primary"
                     icon="el-icon-edit-outline"
-                    @click="goEditPage(scope.row)"
+                    @click="goEdit(scope.row)"
                   ></el-button>
                   <!-- 删除按钮 -->
-                  <el-button type="danger" icon="el-icon-delete"></el-button>
+                  <el-button type="danger" icon="el-icon-delete" @click="delDatainfo(scope.row)"></el-button>
                 </template>
               </el-table-column>
             </el-table>
 
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="editDialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="editUserInfo">确 定</el-button>
-            </span>
+
           </el-dialog>
+
+          <el-dialog
+              title="修改字典信息"
+              :visible.sync="editDialogVisible"
+              width="30%"
+              @close="editDialogClosed"
+            >
+              <el-form :model="editForm" ref="editFormRef" label-width="70px">
+                <el-form-item label="ID">
+                  <el-input v-model="editForm.id" disabled></el-input>
+                </el-form-item>
+                
+                <el-form-item label="所属id">
+                  <el-input v-model="editForm.dictId" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="默认值">
+                  <el-input v-model="editForm.isdefault" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="值">
+                  <el-input v-model="editForm.itemKey"></el-input>
+                </el-form-item>
+              </el-form>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="editDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="editDictinfo">确 定</el-button>
+              </span>
+            </el-dialog>
+
+
+
         </div>
       </el-main>
     </el-container>
@@ -91,10 +125,13 @@ export default {
     return {
       searchName: "",
       editDialogVisible: false,
-      value: "",
+      showDialogVisible: false,
+      
       dataName: "",
+      dataid: "",
       datalist: [],
-      detail: []
+      detail: [],
+      editForm: {itemKey:""},
     };
   },
   created() {
@@ -119,6 +156,7 @@ export default {
       this.datalist = res.data;
       console.log(this.datalist);
     },
+
     async showEditDialog(data) {
       console.log(data);
       var qs = require("qs");
@@ -131,35 +169,72 @@ export default {
         return this.$message.error("查询字典信息失败！");
       }
       this.detail = res.data;
-      this.dataName=data.name
-      this.editDialogVisible = true;
+      this.dataName = data.name;
+      this.dataid = data.id;
+        console.log(this.dataName);
+        console.log(this.dataid);
+      this.showDialogVisible = true;
     },
+
+    async delData(data) {
+      var qs = require("qs");
+      
+      console.log(data);
+      const { data: res } = await this.$axios.post(
+        "/dict/deleteDict",
+        qs.stringify({ dictId: data.id })
+      );
+      console.log(res);
+      if (res.code != 200) {
+          return this.$message.error("删除失败！");
+        }else{
+        // 刷新数据列表
+        this.getDataList();
+        // 提示修改成功
+        this.$message.success("删除成功！");}
+    },
+
+    async delDatainfo(row) {
+      var qs = require("qs");
+         
+          const { data: res } = await this.$axios.post(
+            "/dict/deleteDictInfo",
+            qs.stringify({ 
+              dictInfoId : row.id
+             })
+          );
+          console.log(res);
+          if (res.code != 200) {
+            this.$message.error("删除失败！");
+          } else {
+            this.$message.success("删除成功！");
+            this.showDialogVisible = false;
+          }
+
+    },
+
     // // 监听修改用户对话框的关闭事件
     editDialogClosed() {
       // this.$refs.editFormRef.resetFields();
     },
-    // 修改用户信息并提交
-    editUserInfo() {
-      // this.$refs.editFormRef.validate(async valid => {
-      //   if (!valid) return;
-      //   // 发起修改用户信息的数据请求
-      //   const { data: res } = await this.$http.put(
-      //     "users/" + this.editForm.id,
-      //     {
-      //       email: this.editForm.email,
-      //       mobile: this.editForm.mobile
-      //     }
-      //   );
-      //   if (res.meta.status !== 200) {
-      //     return this.$message.error("更新用户信息失败！");
-      //   }
-      //   // 关闭对话框
-      //   this.editDialogVisible = false;
-      //   // 刷新数据列表
-      //   this.getUserList();
-      //   // 提示修改成功
-      //   this.$message.success("更新用户信息成功！");
-      // });
+    showDialogClosed() {
+      // this.$refs.editFormRef.resetFields();
+    },
+   
+    async editDictinfo() {
+      var qs = require("qs");
+      console.log(this.editForm);
+      const { data: res } = await this.$axios.post(
+        "/dict/updateDictInfo",
+        this.editForm
+      );
+      console.log(res);
+      if (res.code != 200) {
+        return this.$message.error("更新失败！");
+      }
+      this.editDialogVisible = false;
+      this.getDataList();
+      this.$message.success("更新成功！");
     },
     // getDataList() {
     //   console.log(this.datalist);
@@ -170,15 +245,34 @@ export default {
     //     }
     //   ];
     // },
-    goEditPage(row, dataName) {
-      console.log(row.key, dataName);
+
+    goEdit(row) {
+      this.editForm.id = row.id;
+      this.editForm.itemKey = row.itemKey;
+      this.editForm.dictId = row.dictId;
+      this.editForm.isdefault = row.isdefault;
+
+      this.showDialogVisible = false;
+      this.editDialogVisible = true;
+
+      // console.log(row);
+      // this.$router.push({
+      //   path: "/data/create", //跳转的页面
+      //   query: {
+      //     key: row.id,
+      //     value: row.itemKey,
+      //     default: row.isdefault,
+      //     dictId: row.dictId
+      //   }
+      // });
+    },
+    goEditPage1(dataid) {
+      console.log(dataid);
       this.$router.push({
         path: "/data/create", //跳转的页面
         query: {
-          key: row.key,
-          value: row.value,
-          default: row.default,
-          name: dataName
+          
+          dictId: dataid
         }
       });
     }

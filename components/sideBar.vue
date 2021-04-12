@@ -50,30 +50,6 @@
         </el-menu-item-group>
       </el-submenu>
 
-      <el-submenu index="data">
-        <template slot="title">
-          <i class="el-icon-edit"></i>
-          <span>数据字典管理</span>
-        </template>
-        <el-menu-item-group>
-          <el-menu-item index="/data">查看字典</el-menu-item>
-          <el-menu-item index="/data/create">数据字典录入</el-menu-item>
-          <el-menu-item index="/data/show">数据层级展示</el-menu-item>
-        </el-menu-item-group>
-      </el-submenu>
-      
-      <el-submenu index="setting">
-        <template slot="title">
-          <i class="el-icon-setting"></i>
-          <span>系统参数管理</span>
-        </template>
-        <el-menu-item-group>
-          <el-menu-item index="/setting">查看参数</el-menu-item>
-
-          
-        </el-menu-item-group>
-      </el-submenu>
-
       <el-submenu index="authority">
         <template slot="title">
           <i class="el-icon-lock"></i>
@@ -85,6 +61,34 @@
           
         </el-menu-item-group>
       </el-submenu>
+
+      <el-submenu index="data">
+        <template slot="title">
+          <i class="el-icon-edit"></i>
+          <span>数据字典管理</span>
+        </template>
+        <el-menu-item-group>
+          <el-menu-item index="/data">查看字典</el-menu-item>
+          <el-menu-item index="/data/createData">新增字典</el-menu-item>
+          <el-menu-item index="/data/create">数据字典录入</el-menu-item>
+          <!-- <el-menu-item index="/data/show">数据层级展示</el-menu-item> -->
+        </el-menu-item-group>
+      </el-submenu>
+      
+      <el-submenu index="setting">
+        <template slot="title">
+          <i class="el-icon-setting"></i>
+          <span>系统参数管理</span>
+        </template>
+        <el-menu-item-group>
+          <el-menu-item index="/setting">查看参数</el-menu-item>
+           <el-menu-item index="/setting/create">新增参数</el-menu-item>
+
+          
+        </el-menu-item-group>
+      </el-submenu>
+
+      
 
 
     </el-menu>

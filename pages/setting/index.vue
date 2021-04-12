@@ -11,6 +11,20 @@
         <div>
           <!-- 卡片视图区域 -->
           <el-card>
+            <!-- 搜索与添加区域 -->
+              <el-row :gutter="20">
+                <!-- <el-col :span="8">
+                  <el-input placeholder="请输入内容" clearable>
+                    <el-button slot="append" icon="el-icon-search"></el-button>
+                  </el-input>
+                </el-col>-->
+                <el-col :span="4">
+                  <el-button type="primary">
+                    <nuxt-link to="/setting/create">新增参数</nuxt-link>
+                  </el-button>
+                </el-col>
+              </el-row>
+              <br />
             <!-- 用户列表区域 -->
             <!-- datalist是数据源头 -->
             <el-table :data="paramsList" border stripe>
@@ -23,6 +37,7 @@
                 <template slot-scope="scope">
                   <!-- 修改按钮 -->
                   <el-button type="primary" icon="el-icon-edit" @click="showEditDialog(scope.row)"></el-button>
+                <el-button type="danger" icon="el-icon-delete" @click="deleteParm(scope.row)"></el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -30,15 +45,16 @@
           <el-dialog
             title="修改参数"
             :visible.sync="editDialogVisible"
+            :v-if="editDialogVisible"
             width="50%"
             @close="editDialogClosed"
           >
-            <el-form :model="editForm" ref="editFormRef" label-width="70px">
+            <el-form :model="editForm" ref="editForm" label-width="70px">
               <el-form-item label="ID">
                 <el-input v-model="editForm.id" :disabled="true"></el-input>
               </el-form-item>
               <el-form-item label="名称">
-                <el-input v-model="editForm.keyName" :disabled="true"></el-input>
+                <el-input v-model="editForm.keyName" ></el-input>
               </el-form-item>
               <el-form-item label="经验值">
                 <el-input v-model="editForm.value"></el-input>
@@ -61,7 +77,7 @@ export default {
   
   data() {
     return {
-      value: "",
+      // value: "",
       // 控制修改用户对话框的显示与隐藏
       editDialogVisible: false,
       paramsList: [],
@@ -74,38 +90,65 @@ export default {
   methods: {
     //获取参数表
     async getParamsList() {
-      const { data: res } = await this.$axios.get("/param/getallParam");
+      const { data: res } = await this.$axios.get("/param/getAllParam");
       console.log(res);
       if (res.code != 200) {
         return this.$message.error("获取参数列表失败！");
       }
       this.paramsList = res.data;
     },
+
     showEditDialog(data) {
       console.log(data);
       this.editForm = data;
       this.editDialogVisible = true;
     },
+
     async editParaInfo() {
       var qs = require("qs");
-      let postForm = {
-        id: this.editForm.id + "",
-        key: this.editForm.keyName,
-        value: this.editForm.value
-      };
-      console.log("修改后参数")
-      console.log(postForm);
+      
+      console.log("修改后参数");
+      console.log(this.editForm);
       const { data: res } = await this.$axios.post(
         "/param/update",
-        qs.stringify(postForm)
+        qs.stringify({id: this.editForm.id + "",
+        key: this.editForm.keyName,
+        value: this.editForm.value})
       );
+
+      if (res.code != 200) {
+        this.$message.error("修改失败！");
+      } else {
+        this.$message.success("修改成功！");
+      }
       // 关闭对话框
       this.editDialogVisible = false;
       this.getParamsList();
     },
+
+    async deleteParm(data){
+      var qs = require("qs");
+      
+      console.log(data);
+      const { data: res } = await this.$axios.post(
+        "/param/delete",
+        qs.stringify({ id: data.id })
+      );
+      console.log(res);
+      if (res.code != 200) {
+          return this.$message.error("删除失败！");
+        }else{
+        // 刷新数据列表
+        this.getParamsList();
+        // 提示修改成功
+        this.$message.success("删除成功！");}
+    },
+
     // 监听修改用户对话框的关闭事件
     editDialogClosed() {
-      this.$refs.editFormRef.resetFields();
+        this.$refs.editForm.resetFields();
+        this.getParamsList();
+        
     }
   }
 };
