@@ -49,7 +49,7 @@ export default {
   methods: {
     async addParam() {
       const { data: res } = await this.$axios.post(
-        "/param/addParam",
+        "/param",
         this.Param
       );
       console.log(res);

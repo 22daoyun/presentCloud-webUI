@@ -63,6 +63,23 @@
                   style="width:300px"
                   >登录</el-button>
               </div>
+
+                 
+              <div>
+                <div style=" margin:20px 0 0px 10px;color: #606266;">社交账号登录：
+                <el-link href="" :underline="false" style="margin-left:10px">
+                  <i class="fa fa-qq" aria-hidden="true"></i>
+                </el-link>
+                <el-link href="" :underline="false" style="margin-left:10px">
+                  <i class="fa fa-wechat" aria-hidden="true"></i>
+                </el-link>
+                <el-link href="" :underline="false" style="margin-left:10px">
+                  <i class="fa fa-weibo" ></i>
+                </el-link>
+                </div>
+              </div>
+
+
               <div>
                 <el-link
                  href="/sinup"
@@ -147,6 +164,21 @@
                   >登录</el-button
                 >
               </div>
+
+              <div>
+                <div style=" margin:20px 0 0px 10px;color: #606266;">社交账号登录：
+                <el-link href="" :underline="false" style="margin-left:10px">
+                  <i class="fa fa-qq" aria-hidden="true"></i>
+                </el-link>
+                <el-link href="" :underline="false" style="margin-left:10px">
+                  <i class="fa fa-wechat" aria-hidden="true"></i>
+                </el-link>
+                <el-link href="" :underline="false" style="margin-left:10px">
+                  <i class="fa fa-weibo" ></i>
+                </el-link>
+                </div>
+              </div>
+
               <div>
                 <el-link
                  href="/sinup"

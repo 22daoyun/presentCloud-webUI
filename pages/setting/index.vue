@@ -90,7 +90,7 @@ export default {
   methods: {
     //获取参数表
     async getParamsList() {
-      const { data: res } = await this.$axios.get("/param/getAllParam");
+      const { data: res } = await this.$axios.get("/allParam");
       console.log(res);
       if (res.code != 200) {
         return this.$message.error("获取参数列表失败！");
@@ -109,11 +109,11 @@ export default {
       
       console.log("修改后参数");
       console.log(this.editForm);
-      const { data: res } = await this.$axios.post(
-        "/param/update",
-        qs.stringify({id: this.editForm.id + "",
-        key: this.editForm.keyName,
-        value: this.editForm.value})
+      const { data: res } = await this.$axios.put(
+        "/paramByRecord",
+        {id: this.editForm.id,
+        keyName: this.editForm.keyName,
+        value: this.editForm.value}
       );
 
       if (res.code != 200) {
@@ -130,9 +130,9 @@ export default {
       var qs = require("qs");
       
       console.log(data);
-      const { data: res } = await this.$axios.post(
-        "/param/delete",
-        qs.stringify({ id: data.id })
+      const { data: res } = await this.$axios.delete(
+        "/param",{params:
+        { id: data.id }}
       );
       console.log(res);
       if (res.code != 200) {

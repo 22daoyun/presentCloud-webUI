@@ -76,7 +76,7 @@
               <el-link
                 href="/login"
                 :underline="false"
-                style="margin:20px 0 40px 80px"
+                style="margin:20px 0 40px 70px"
                 >已有账号，立即登陆</el-link
               >
             </div>
@@ -217,7 +217,7 @@ export default {
           } catch (e) {
             console.log(e);
           }
-
+      
       const TIME_COUNT = 60
       if (!this.timer) {
         this.form.countdown = TIME_COUNT

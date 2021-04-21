@@ -17,11 +17,11 @@
       </el-row>
 
     
+        <img class="img" id="logo_img" src="@/assets/logo1.png" />
       
-      <el-dropdown style="margin:0 120px">
-        
+      <el-dropdown style="margin:0 120px 0 5px">
         <span class="el-dropdown-link">
-          <i class="el-icon-user"></i>
+          
           
           个人中心
           <i class="el-icon-arrow-down el-icon--right"></i>
@@ -97,6 +97,15 @@ export default {
       color: #fff !important;
     }
   }
+}
+#logo_img {
+  width: 50px;
+  height: 50px;
+  margin: auto;
+  position: relative;
+  right: 0%;
+  // transform: translate(-50%, 0);
+  border-radius: 100px;
 }
 
 .el-dropdown-link {
