@@ -15,6 +15,10 @@
               <el-form-item label="字典名称">
                 <el-input v-model="Data.name"></el-input>
               </el-form-item>
+
+              <el-form-item label="关键字">
+                <el-input v-model="Data.eng"></el-input>
+              </el-form-item>
               
             </el-form>
           </el-card>
@@ -44,6 +48,11 @@ export default {
   },
   methods: {
     async addData() {
+      if(this.Data.eng==null){
+
+        this.$message.error("关键字必填");
+        return;
+      }
       const { data: res } = await this.$axios.post(
         "/dict/addDict",
         this.Data
@@ -64,7 +73,7 @@ export default {
 .el-card {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15) !important;
   width: 600px;
-  height: 100px;
+  height: 150px;
 }
 .create {
   position: absolute;

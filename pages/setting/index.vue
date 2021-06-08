@@ -30,14 +30,14 @@
             <el-table :data="paramsList" border stripe>
               <!-- 索引列 -->
               <el-table-column type="index" label="#"></el-table-column>
-              <el-table-column label="ID" prop="id"></el-table-column>
-              <el-table-column label="名称(key)" prop="keyName"></el-table-column>
-              <el-table-column label="值(value)" prop="value"></el-table-column>
+              <el-table-column label="关键字" prop="keyEng"></el-table-column>
+              <el-table-column label="名称" prop="keyName"></el-table-column>
+              <el-table-column label="值" prop="value"></el-table-column>
               <el-table-column label="操作" width="150%">
                 <template slot-scope="scope">
                   <!-- 修改按钮 -->
                   <el-button type="primary" icon="el-icon-edit" @click="showEditDialog(scope.row)"></el-button>
-                <el-button type="danger" icon="el-icon-delete" @click="deleteParm(scope.row)"></el-button>
+                <el-button type="danger" icon="el-icon-delete" @click="showDeleDialog(scope.row)"></el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -50,13 +50,13 @@
             @close="editDialogClosed"
           >
             <el-form :model="editForm" ref="editForm" label-width="70px">
-              <el-form-item label="ID">
-                <el-input v-model="editForm.id" :disabled="true"></el-input>
+              <el-form-item label="关键字">
+                <el-input v-model="editForm.keyEng" disabled></el-input>
               </el-form-item>
               <el-form-item label="名称">
                 <el-input v-model="editForm.keyName" ></el-input>
               </el-form-item>
-              <el-form-item label="经验值">
+              <el-form-item label="值">
                 <el-input v-model="editForm.value"></el-input>
               </el-form-item>
             </el-form>
@@ -65,6 +65,21 @@
               <el-button type="primary" @click="editParaInfo">确 定</el-button>
             </span>
           </el-dialog>
+
+          <el-dialog
+            title="确认是否删除"
+            :visible.sync="deleDialogVisible"
+            :v-if="deleDialogVisible"
+            width="30%"
+            @close="deleDialogClosed"
+          >
+
+              <el-button @click="deleDialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="deleteParm(deleForm)">确 定</el-button>
+            
+          </el-dialog>
+
+
         </div>
       </el-main>
     </el-container>
@@ -80,8 +95,10 @@ export default {
       // value: "",
       // 控制修改用户对话框的显示与隐藏
       editDialogVisible: false,
+      deleDialogVisible: false,
       paramsList: [],
-      editForm: {}
+      editForm: {},
+      deleForm: {}
     };
   },
   created() {
@@ -104,16 +121,22 @@ export default {
       this.editDialogVisible = true;
     },
 
+    showDeleDialog(data) {
+      console.log(data);
+      this.deleForm = data;
+      this.deleDialogVisible = true;
+    },
+
     async editParaInfo() {
       var qs = require("qs");
       
       console.log("修改后参数");
       console.log(this.editForm);
       const { data: res } = await this.$axios.put(
-        "/paramByRecord",
-        {id: this.editForm.id,
+        "/param",{param:
+        {keyEng: this.editForm.keyEng,
         keyName: this.editForm.keyName,
-        value: this.editForm.value}
+        value: this.editForm.value}}
       );
 
       if (res.code != 200) {
@@ -127,12 +150,13 @@ export default {
     },
 
     async deleteParm(data){
+      this.deleDialogVisible = false;
       var qs = require("qs");
       
       console.log(data);
       const { data: res } = await this.$axios.delete(
         "/param",{params:
-        { id: data.id }}
+        { keyEng: data.keyEng }}
       );
       console.log(res);
       if (res.code != 200) {
@@ -149,6 +173,9 @@ export default {
         this.$refs.editForm.resetFields();
         this.getParamsList();
         
+    },
+    deleDialogClosed() {
+       
     }
   }
 };

@@ -76,6 +76,10 @@
                 <el-link href="" :underline="false" style="margin-left:10px">
                   <i class="fa fa-weibo" ></i>
                 </el-link>
+                <el-link href="https://github.com/login/oauth/authorize?client_id=5e524482043ff89d4819&redirect_uri=http://localhost:3000/callback" :underline="false" style="margin-left:10px">
+                  <i class="fa fa-github" ></i>
+                </el-link>
+
                 </div>
               </div>
 
@@ -175,6 +179,9 @@
                 </el-link>
                 <el-link href="" :underline="false" style="margin-left:10px">
                   <i class="fa fa-weibo" ></i>
+                </el-link>
+                <el-link href="https://github.com/login/oauth/authorize?client_id=5e524482043ff89d4819&redirect_uri=http://localhost:3000/callback" :underline="false" style="margin-left:10px">
+                  <i class="fa fa-github" ></i>
                 </el-link>
                 </div>
               </div>
@@ -500,6 +507,8 @@ export default {
         }
      })
      },
+
+     
 
 
   

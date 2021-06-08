@@ -137,7 +137,7 @@ export default {
   methods: {
     // 获取用户表信息
     async getClassList() {
-      const { data: res } = await this.$axios.get("/app/class/findAll");
+      const { data: res } = await this.$axios.get("/class/findAll");
       console.log(res);
       if (res.code != 200) {
         return this.$message.error("获取用户列表失败！");
@@ -147,8 +147,8 @@ export default {
     async deleteClass(object) {
       var qs = require("qs");
       this.postForm.classesId = object.classesId;
-      const { data: res } = await this.$axios.post(
-        "/app/class/deleteClass",
+      const { data: res } = await this.$axios.delete(
+        "/class/deleteClass",
         qs.stringify({ classId: this.postForm.classesId })
       );
       console.log(res);
@@ -168,8 +168,8 @@ export default {
     async editClass() {
       var qs = require("qs");
       console.log(this.editForm);
-      const { data: res } = await this.$axios.post(
-        "/webClass/update",
+      const { data: res } = await this.$axios.put(
+        "/class/update",
         this.editForm
       );
       console.log(res);
@@ -185,8 +185,8 @@ export default {
       console.log(this.editForm);
       this.studentListVisible = true;
       var qs = require("qs");
-      const { data: res } = await this.$axios.post(
-        "/webClass/findAllUserInCurrentClass",
+      const { data: res } = await this.$axios.get(
+        "/class/getCurrentuserClass",
         qs.stringify({ classes_id: data.classesId })
       );
       this.studentList = res.data;

@@ -56,7 +56,7 @@ export default {
   methods: {
     async submitForm() {
       const { data: res } = await this.$axios.post(
-        "/app/class/createClass",
+        "class/createClass",
         this.Classes
       );
       console.log(res);

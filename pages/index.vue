@@ -12,11 +12,14 @@
         <nuxt-link to="/setting">参数设置</nuxt-link>
       </el-row> -->
     <el-card >
-      <el-calendar v-model="value"></el-calendar>
+      <el-calendar ></el-calendar>
       
     </el-card>
   </div>
 </template>
+
+
+
 
 <style scoped lang="less">
 .navs {

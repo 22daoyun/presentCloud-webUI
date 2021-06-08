@@ -139,7 +139,12 @@ export default {
       }
     }
   },
+  created() {
+       console.log('111');
+    
+  },
   methods: {
+    
     // async sendMessage(phone,confirm) {
 		// 		console.log("{\"code\":\""+confirm +"\"}")
 		// 		console.log('phone',phone)

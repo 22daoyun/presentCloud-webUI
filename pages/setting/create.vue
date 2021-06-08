@@ -12,8 +12,13 @@
           <el-card>
             <!-- 内容主体区域 -->
             <el-form label-width="70px">
+              
               <el-form-item label="参数名称">
                 <el-input v-model="Param.keyName"></el-input>
+              </el-form-item>
+
+              <el-form-item label="关键字">
+                <el-input v-model="Param.keyEng"></el-input>
               </el-form-item>
 
               <el-form-item label="参数值">
@@ -36,6 +41,8 @@
 <script>
 
 export default {
+
+  
   
   data() {
     
@@ -48,13 +55,23 @@ export default {
   },
   methods: {
     async addParam() {
+
+      if(this.Param.keyEng==null||this.Param.keyName==null||this.Param.value==null){
+
+        this.$message.error("名称、关键字、值必填");
+        return;
+      }
+
       const { data: res } = await this.$axios.post(
         "/param",
         this.Param
       );
       console.log(res);
       if (res.code != 200) {
-        this.$message.error("添加失败！");
+        this.$message({
+                  message: res.msg,
+                  type: "error"
+                    });
       } else {
         this.$message.success("添加成功！");
         this.$router.push("/setting");
@@ -68,7 +85,7 @@ export default {
 .el-card {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15) !important;
   width: 600px;
-  height: 180px;
+  height: 230px;
 }
 .create {
   position: absolute;

@@ -13,22 +13,27 @@
             
             <!-- 内容主体区域 -->
             <el-form :model="addForm" ref="addFormRef" label-width="120px">
-              <el-form-item label="字典所属id" prop="class">
+              <el-form-item label="字典所属类别" prop="class">
                 <el-select v-model="addForm.class" placeholder="请选择数据字典类别">
                   <el-option
                     v-for="item in options"
-                    :key="item.id"
-                    :label="item.id"
-                    :value="item.id"
+                    :key="item.eng"
+                    :label="item.eng"
+                    :value="item.eng"
                   ></el-option>
                 </el-select>
               </el-form-item>
               <!-- <el-form-item label="字典id(key)" prop="key">
                 <el-input v-model="addForm.key"></el-input>
               </el-form-item> -->
-              <el-form-item label="字典值(value)" prop="value">
+              <el-form-item label="数值" prop="value">
+                <el-input v-model="addForm.key"></el-input>
+              </el-form-item>
+
+              <el-form-item label="名称" prop="value">
                 <el-input v-model="addForm.value"></el-input>
               </el-form-item>
+              
               <el-form-item label="是否默认值" prop="mobile">
                 <el-radio v-model="addForm.default" label="true">是</el-radio>
                 <el-radio v-model="addForm.default" label="false">否</el-radio>
@@ -99,18 +104,28 @@ export default {
         this.$axios.post(
             "/dict/addDictinfo",
             { 
-              dictId: this.addForm.class,
+              dictEng: this.addForm.class,
               isdefault: this.addForm.default,
-              
-              itemKey: this.addForm.value,
+              itemValue: this.addForm.value,
+              itemKey: this.addForm.key,
              }
           ).then(res => {
                 
 
           console.log(res);
-          if (res.data.code != 200) {
-            this.$message.error("添加字典失败！");
-          } else {
+          if (res.data.code == 212) {
+            this.$message.error("数值重复！");
+            // this.$message({
+            //       message: res.data.msg,
+            //       type: "error"
+            //         });
+          } else if(res.data.code != 200){
+            this.$message({
+                  message: res.data.msg,
+                  type: "error"
+                    });
+            }else 
+            {
             this.$message.success("添加字典成功！");
             this.$router.push("/data");
           }})
@@ -128,11 +143,11 @@ export default {
       
       const routerParams = this.$route.query.key;
       // 将数据放在当前组件的数据内
-       this.addForm.key = routerParams;
+      //  this.addForm.key = routerParams;
       
-       this.addForm.value = this.$route.query.value;
-       this.addForm.class = this.$route.query.dictId;
-       
+      //  this.addForm.value = this.$route.query.value;
+       this.addForm.class = this.$route.query.eng;
+       this.addForm.key = this.$route.query.num;
       // if (this.$route.query.default == 'true' ) {
       //   this.addForm.default = "1";
       // }else{
@@ -140,7 +155,7 @@ export default {
       // }
       console.log(this.addForm);
 
-      const { data: res } = await this.$axios.get("/dict/findAllDict");
+      const { data: res } = await this.$axios.post("/dict/findAllDict");
       console.log(res);
       
       this.options = res.data;
@@ -154,7 +169,7 @@ export default {
 .el-card {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15) !important;
   width: 600px;
-  height: 220px;
+  height: 280px;
 }
 .create {
   position: absolute;

@@ -31,8 +31,8 @@
             <el-table :data="datalist" border stripe>
               <!-- 索引列 -->
               <el-table-column type="index" label="#"></el-table-column>
-              <el-table-column label="字典名" prop="name"></el-table-column>
-              <el-table-column label="ID" prop="id"></el-table-column>
+              <el-table-column label="字典名称" prop="name"></el-table-column>
+              <el-table-column label="关键字" prop="eng"></el-table-column>
               <el-table-column label="操作" width="150%">
                 <template slot-scope="scope">
                   <!-- 详情按钮 -->
@@ -55,17 +55,19 @@
             width="50%"
             @close="showDialogClosed"
           >
-            <el-button type="success" @click="goEditPage1(dataid)">添加数据字典项</el-button>
+            <el-button type="success" @click="goEditPage1(eng,num)">添加数据字典明细</el-button>
             <br />
             <br />
             <el-table :data="detail" border stripe>
               <!-- 索引列 -->
               <el-table-column type="index" label="#"></el-table-column>
-              <el-table-column label="值(value)" prop="itemKey"></el-table-column>
+              <el-table-column label="所属字典" prop="dictEng"></el-table-column>
+              <el-table-column label="名称" prop="itemValue"></el-table-column>
+              <el-table-column label="数值" prop="itemKey"></el-table-column>
               <el-table-column label="默认值" prop="isdefault" :formatter="stateFormat"></el-table-column>
-              <el-table-column label="ID" prop="id"></el-table-column>
-              <el-table-column label="所属字典ID" prop="dictId"></el-table-column>
-              <el-table-column label="操作" width="150%">
+              <!-- <el-table-column label="ID" prop="id"></el-table-column> -->
+              
+              <el-table-column label="操作" width="250%">
                 <template slot-scope="scope">
                   <!-- 编辑按钮 -->
                   <el-button
@@ -75,6 +77,12 @@
                   ></el-button>
                   <!-- 删除按钮 -->
                   <el-button type="danger" icon="el-icon-delete" @click="delDatainfo(scope.row)"></el-button>
+
+                  <el-button
+                    type="primary"
+                    @click="goup(scope.row)"
+                  >上移</el-button>
+
                 </template>
               </el-table-column>
             </el-table>
@@ -89,19 +97,31 @@
               @close="editDialogClosed"
             >
               <el-form :model="editForm" ref="editFormRef" label-width="70px">
-                <el-form-item label="ID">
-                  <el-input v-model="editForm.id" disabled></el-input>
+
+                <el-form-item label="所属字典">
+                  <el-input v-model="editForm.dictEng" disabled></el-input>
                 </el-form-item>
-                
-                <el-form-item label="所属id">
-                  <el-input v-model="editForm.dictId" disabled></el-input>
+
+                <el-form-item label="名称">
+                  <el-input v-model="editForm.itemValue"></el-input>
                 </el-form-item>
-                <el-form-item label="默认值">
-                  <el-input v-model="editForm.isdefault" disabled></el-input>
-                </el-form-item>
-                <el-form-item label="值">
+
+                <el-form-item label="数值">
                   <el-input v-model="editForm.itemKey"></el-input>
                 </el-form-item>
+
+                
+                <!-- <el-form-item label="默认值">
+                  <el-input v-model="editForm.isdefault" disabled></el-input>
+                </el-form-item> -->
+                <el-form-item label="默认值" prop="isdefault">
+                  <el-radio-group v-model="editForm.isdefault" >
+                <el-radio :label="true">是</el-radio>
+                <el-radio :label="false">否</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+
+                
               </el-form>
               <span slot="footer" class="dialog-footer">
                 <el-button @click="editDialogVisible = false">取 消</el-button>
@@ -126,12 +146,12 @@ export default {
       searchName: "",
       editDialogVisible: false,
       showDialogVisible: false,
-      
+      num:"0",
       dataName: "",
-      dataid: "",
+      eng: "",
       datalist: [],
       detail: [],
-      editForm: {itemKey:""},
+      editForm: {itemKey:"",isdefault:"false"},
     };
   },
   created() {
@@ -147,7 +167,7 @@ export default {
     },
     async getDataList() {
       console.log("loading data list");
-      const { data: res } = await this.$axios.get("/dict/findAllDict");
+      const { data: res } = await this.$axios.post("/dict/findAllDict");
       // const { data: res } = await this.$axios.get("/user/findAllUsersGoPage");
       console.log(res);
       if (res.code != 200) {
@@ -161,16 +181,19 @@ export default {
       console.log(data);
       var qs = require("qs");
       const { data: res } = await this.$axios.post(
-        "/dict/findByDictForDictInfo",
-        data
+        "/dict/findDictInfoByDictEng",
+        qs.stringify({ 
+              dictEng : data.eng
+             })
       );
-      console.log(res.data);
+      console.log(res.data.length);
       if (res.code != 200) {
         return this.$message.error("查询字典信息失败！");
       }
       this.detail = res.data;
       this.dataName = data.name;
-      this.dataid = data.id;
+      this.eng = data.eng;
+      this.num = res.data.length;
         console.log(this.dataName);
         console.log(this.dataid);
       this.showDialogVisible = true;
@@ -212,6 +235,26 @@ export default {
           }
 
     },
+    async goup(row) {
+
+      console.log(row);
+      var qs = require("qs");
+         
+          const { data: res } = await this.$axios.post(
+            "/dict/upward",
+            qs.stringify({ 
+              dictInfoId : row.id
+             })
+          );
+          console.log(res);
+          if (res.code != 200) {
+            this.$message.error("上移失败！");
+          } else {
+            this.$message.success("上移成功！");
+            this.showDialogVisible = false;
+          }
+
+    },
 
     // // 监听修改用户对话框的关闭事件
     editDialogClosed() {
@@ -249,9 +292,9 @@ export default {
     goEdit(row) {
       this.editForm.id = row.id;
       this.editForm.itemKey = row.itemKey;
-      this.editForm.dictId = row.dictId;
+      this.editForm.dictEng = row.dictEng;
       this.editForm.isdefault = row.isdefault;
-
+      this.editForm.itemValue = row.itemValue;
       this.showDialogVisible = false;
       this.editDialogVisible = true;
 
@@ -266,13 +309,14 @@ export default {
       //   }
       // });
     },
-    goEditPage1(dataid) {
-      console.log(dataid);
+    goEditPage1(eng,num) {
+      console.log(eng);
+      console.log(num);
       this.$router.push({
         path: "/data/create", //跳转的页面
         query: {
-          
-          dictId: dataid
+          num: num,
+          eng: eng
         }
       });
     }
