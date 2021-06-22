@@ -15,9 +15,9 @@
               <el-form-item label="用户名" prop="username">
                 <el-input v-model="addForm.username"></el-input>
               </el-form-item>
-              <!-- <el-form-item label="密码" prop="password">
+              <el-form-item label="密码" prop="password">
                 <el-input v-model="addForm.password"></el-input>
-              </el-form-item> -->
+              </el-form-item>
               <el-form-item label="手机" prop="mobile">
                 <el-input v-model="addForm.mobile"></el-input>
               </el-form-item>

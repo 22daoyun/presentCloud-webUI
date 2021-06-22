@@ -260,12 +260,12 @@ export default {
       );
       console.log(res);
       if (res.code != 200) {
-        return this.$message.error("更新用户信息失败！");
+        return this.$message.error("更新失败！");
       }
       // 关闭对话框
       this.editDialogVisible = false;
       // 提示修改成功
-      this.$message.success("更新用户信息成功！");
+      this.$message.success("更新成功！");
     },
     async delRole(data) {
       this.editForm=data;
@@ -276,12 +276,12 @@ export default {
         qs.stringify({rolename:this.editForm.roleName})
       );
        if (res.code != 200) {
-          return this.$message.error("删除用户失败！");
+          return this.$message.error("删除失败！");
         }
         // 刷新数据列表
         this.getRolesList();
         // 提示修改成功
-        this.$message.success("删除用户成功！");
+        this.$message.success("删除成功！");
     }
   }
 };

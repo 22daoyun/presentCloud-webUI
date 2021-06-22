@@ -140,18 +140,21 @@ export default {
       const { data: res } = await this.$axios.get("/class/findAll");
       console.log(res);
       if (res.code != 200) {
-        return this.$message.error("获取用户列表失败！");
+        return this.$message.error("获取列表失败！");
       }
       this.userlist = res.data;
     },
     async deleteClass(object) {
       var qs = require("qs");
       this.postForm.classesId = object.classesId;
-      const { data: res } = await this.$axios.delete(
+      const { data: res } = await this.$axios.post(
         "/class/deleteClass",
         qs.stringify({ classId: this.postForm.classesId })
       );
       console.log(res);
+      if (res.code != 200) {
+        return this.$message.error("删除失败！");
+      }else this.$message.success("删除成功！");
       this.getClassList();
     },
     // 展示编辑用户的对话框
@@ -168,7 +171,7 @@ export default {
     async editClass() {
       var qs = require("qs");
       console.log(this.editForm);
-      const { data: res } = await this.$axios.put(
+      const { data: res } = await this.$axios.post(
         "/class/update",
         this.editForm
       );
@@ -182,12 +185,12 @@ export default {
     },
     // 展示学生列表的对话框
     async showStudentList(data) {
-      console.log(this.editForm);
+      console.log(data.classesId);
       this.studentListVisible = true;
       var qs = require("qs");
       const { data: res } = await this.$axios.get(
-        "/class/getCurrentuserClass",
-        qs.stringify({ classes_id: data.classesId })
+        "/class/getStudentByClass",{params:
+        { classId: data.classesId}}
       );
       this.studentList = res.data;
       console.log(res);

@@ -20,6 +20,7 @@
 
 <script>
 const axios = require('axios');
+import _local from '@/plugins/localStorage'
 export default{
     
     data(){
@@ -62,6 +63,7 @@ export default{
                 this.$message.error("失败！");
             } else {
                 this.$message.success("存入数据库成功！");
+                 _local.set("sid", this.Code,60*60*24*10*1000);
                 this.$router.push("/");
             }})
         

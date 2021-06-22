@@ -133,7 +133,7 @@ export default {
       console.log("修改后参数");
       console.log(this.editForm);
       const { data: res } = await this.$axios.put(
-        "/param",{param:
+        "/param",{params:
         {keyEng: this.editForm.keyEng,
         keyName: this.editForm.keyName,
         value: this.editForm.value}}

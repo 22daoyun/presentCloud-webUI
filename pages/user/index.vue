@@ -267,7 +267,7 @@ export default {
       console.log(res);
       if (res.code != 200) {
         return this.$message.error("删除用户失败！");
-      }
+      }else this.$message.success("删除成功！");
       this.getUserList();
     },
     // 修改用户信息并提交

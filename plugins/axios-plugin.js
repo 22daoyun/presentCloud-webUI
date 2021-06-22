@@ -32,18 +32,18 @@ export default({app,store, route, redirect, $axios}) => {
     // switch (code) 分情况处理.
     switch (code) {
               
-              case 403:
-                error.message = "拒绝访问";
-                redirect("/errors/Error403");
-                break;
-              case 404:
-                error.message = "请求错误,未找到该资源";
-                redirect("/errors/Error404");
-                break;
-              case 500:
-                error.message = "服务器端出错";
-                redirect("/errors/Error500");
-                break;
+              // case 403:
+              //   error.message = "拒绝访问";
+              //   redirect("/errors/Error403");
+              //   break;
+              // case 404:
+              //   error.message = "请求错误,未找到该资源";
+              //   redirect("/errors/Error404");
+              //   break;
+              // case 500:
+              //   error.message = "服务器端出错";
+              //   redirect("/errors/Error500");
+              //   break;
             }
   })
 

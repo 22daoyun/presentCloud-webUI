@@ -29,7 +29,7 @@ module.exports = {
     {src:'~/plugins/axios-plugin2'},
     {src:'~/plugins/axios-plugin'},
     {src: "~/plugins/localStorage", ssr: false },
-    
+    { src: "~/plugins/routeguard", ssr: false },
   ],
   build: {
     vendor: ['element-ui']

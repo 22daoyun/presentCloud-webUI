@@ -93,10 +93,10 @@ export default {
       );
       console.log(res);
       if (res.code != 200) {
-        this.$message.error("添加用户失败！");
+        this.$message.error("添加角色失败！");
       } else {
-        this.$message.success("添加用户成功！");
-        this.$router.push("/user");
+        this.$message.success("添加角色成功！");
+        this.$router.push("/role");
       }
     },
     resetForm(formName) {

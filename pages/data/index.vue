@@ -103,11 +103,11 @@
                 </el-form-item>
 
                 <el-form-item label="名称">
-                  <el-input v-model="editForm.itemValue"></el-input>
+                  <el-input v-model="editForm.itemValue" disabled></el-input>
                 </el-form-item>
 
                 <el-form-item label="数值">
-                  <el-input v-model="editForm.itemKey"></el-input>
+                  <el-input v-model="editForm.itemKey" disabled></el-input>
                 </el-form-item>
 
                 
@@ -205,7 +205,7 @@ export default {
       console.log(data);
       const { data: res } = await this.$axios.post(
         "/dict/deleteDict",
-        qs.stringify({ dictId: data.id })
+        qs.stringify({ dictEng: data.eng })
       );
       console.log(res);
       if (res.code != 200) {
