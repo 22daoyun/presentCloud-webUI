@@ -19,8 +19,8 @@
                   </el-input>
                 </el-col>-->
                 <el-col :span="4">
-                  <el-button type="primary">
-                    <nuxt-link to="/setting/create">新增参数</nuxt-link>
+                  <el-button type="primary" @click="toAdd()">
+                    新增参数
                   </el-button>
                 </el-col>
               </el-row>
@@ -132,11 +132,11 @@ export default {
       
       console.log("修改后参数");
       console.log(this.editForm);
-      const { data: res } = await this.$axios.put(
-        "/param",{params:
-        {keyEng: this.editForm.keyEng,
-        keyName: this.editForm.keyName,
-        value: this.editForm.value}}
+      const { data: res } = await this.$axios.post(
+        "/updateParam",
+        qs.stringify({ keyEng: this.editForm.keyEng,
+        keyName:this.editForm.keyName,
+        value:this.editForm.value })
       );
 
       if (res.code != 200) {
@@ -154,9 +154,9 @@ export default {
       var qs = require("qs");
       
       console.log(data);
-      const { data: res } = await this.$axios.delete(
-        "/param",{params:
-        { keyEng: data.keyEng }}
+      const { data: res } = await this.$axios.post(
+        "/deleteParam",
+        qs.stringify({ keyEng: data.keyEng })
       );
       console.log(res);
       if (res.code != 200) {
@@ -173,6 +173,9 @@ export default {
         this.$refs.editForm.resetFields();
         this.getParamsList();
         
+    },
+    toAdd(){
+      this.$router.push("/setting/create");
     },
     deleDialogClosed() {
        

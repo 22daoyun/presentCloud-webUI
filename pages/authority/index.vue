@@ -13,8 +13,8 @@
           <!-- 添加权限按钮区域 -->
           <el-row>
             <el-col>
-              <el-button type="primary">
-                <nuxt-link to="/authority/create">添加权限</nuxt-link>
+              <el-button type="primary"  @click="toAdd()">
+                添加权限
               </el-button>
             </el-col>
           </el-row>
@@ -102,6 +102,9 @@ export default {
     // 监听修改用户对话框的关闭事件
     editDialogClosed() {
       this.$refs.editFormRef.resetFields();
+    },
+    toAdd(){
+      this.$router.push("/setting/create");
     },
     async editAuthInfo() {
       console.log(this.editForm);

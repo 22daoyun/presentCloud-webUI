@@ -24,8 +24,8 @@
                 </el-input>
               </el-col>
               <el-col :span="4">
-                <el-button type="primary">
-                  <nuxt-link to="/user/create">新增用户</nuxt-link>
+                <el-button type="primary"  @click="toAdd()">
+                  新增用户
                 </el-button>
               </el-col>
             </el-row>
@@ -37,7 +37,7 @@
               <el-table-column type="index" label="#"></el-table-column>
               <el-table-column label="用户名" prop="name"></el-table-column>
               <el-table-column label="昵称" prop="nickname"></el-table-column>
-              <el-table-column label="电话" prop="tel"></el-table-column>
+              <el-table-column label="电话" prop="phone"></el-table-column>
               <el-table-column label="ID" prop="userId"></el-table-column>
               <el-table-column label="性别" prop="sex"></el-table-column>
               <el-table-column label="角色" prop="rolenames"></el-table-column>
@@ -94,12 +94,12 @@
               <el-form-item label="用户名" prop="name">
                 <el-input v-model="editForm.name"></el-input>
               </el-form-item>
-              <el-form-item label="手机">
-                <el-input v-model="editForm.tel"></el-input>
+              <el-form-item label="手机" prop="phone">
+                <el-input v-model="editForm.phone"></el-input>
               </el-form-item>
-              <el-form-item label="密码" prop="password" >
+              <!-- <el-form-item label="密码" prop="password" >
                 <el-input v-model="editForm.password" type="password"></el-input>
-              </el-form-item>
+              </el-form-item> -->
               <el-form-item label="昵称">
                 <el-input v-model="editForm.nickname"></el-input>
               </el-form-item>
@@ -279,7 +279,7 @@ export default {
         console.log(this.editForm);
         const { data: res } = await this.$axios.post(
           "/user/update",
-          qs.stringify(this.editForm)
+          this.editForm
         );
         console.log(res);
         if (res.code != 200) {
@@ -308,6 +308,9 @@ export default {
       this.roleForm.userId = data.userId;
       console.log(this.roleForm);
       this.roleDialogVisible = true;
+    },
+    toAdd(){
+      this.$router.push("/user/create");
     },
     // 获取所有角色的列表
     async getRolesList() {

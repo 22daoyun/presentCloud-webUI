@@ -18,8 +18,8 @@
                   </el-input>
                 </el-col>-->
                 <el-col :span="4">
-                  <el-button type="primary">
-                    <nuxt-link to="/class/create">新增班课</nuxt-link>
+                  <el-button type="primary"  @click="toAdd()">
+                    新增班课
                   </el-button>
                 </el-col>
               </el-row>
@@ -143,6 +143,9 @@ export default {
         return this.$message.error("获取列表失败！");
       }
       this.userlist = res.data;
+    },
+    toAdd(){
+      this.$router.push("/class/create");
     },
     async deleteClass(object) {
       var qs = require("qs");

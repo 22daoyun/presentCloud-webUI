@@ -20,8 +20,8 @@
                 </el-input>
               </el-col>
               <el-col :span="4">
-                <el-button type="primary">
-                  <nuxt-link to="/data/createData">新增字典</nuxt-link>
+                <el-button type="primary"  @click="toAdd()">
+                  新增字典
                 </el-button>
               </el-col>
             </el-row>
@@ -164,6 +164,9 @@ export default {
       } else {
         return "否";
       }
+    },
+    toAdd(){
+      this.$router.push("/data/create");
     },
     async getDataList() {
       console.log("loading data list");

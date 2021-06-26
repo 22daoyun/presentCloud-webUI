@@ -79,12 +79,12 @@ export default {
   },
   methods: {
     async getUserInfo() {
-      const { data: res } = await this.$axios.get("/user/getCurrentUserApi");
+      const { data: res } = await this.$axios.get("/user/currentUser");
       console.log(res);
-      if (res.code != 200) {
-        MessageBox("提示", "获取用户列表失败");
+      if (!res.userId) {
+        this.$message.error("获取用户列表失败");
       } else {
-        this.userInfo = res.data;
+        this.userInfo = res;
         console.log(this.userInfo);
       }
     }

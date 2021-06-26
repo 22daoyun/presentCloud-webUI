@@ -4,7 +4,7 @@
  * @调用：_local.get('access_token');
  */
 
-var _local = {
+export var _local = {
     //存储,可设置过期时间
     set(key, value, expires) {
         let params = { key, value, expires };

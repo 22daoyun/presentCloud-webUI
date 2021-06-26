@@ -414,6 +414,7 @@ export default {
 
                     // window.localStorage.setItem("sid", res.token,60*60*24*10);
                     _local.set("sid", res.data.token,60*60*24*10*1000);
+                    _local.set("identity", res.data.user.identity);
                     // this.$cookies.set("sid", res.token, "60s");
                     // console.log(this.$cookies.get("sid"));
                     this.$router.push("/");

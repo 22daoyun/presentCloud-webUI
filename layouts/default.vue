@@ -3,7 +3,8 @@
     <Header />
     <el-container>
       <el-aside width="200px">
-          <sideBar />
+          <!-- <sideBar /> -->
+          <div :is="sideBar"></div>
       </el-aside>
         <el-main>
           <nuxt/>
@@ -14,14 +15,51 @@
   </div>
 </template>
 <script>
+
 import Header from "@/components/header.vue";
-import sideBar from "@/components/sideBar.vue"
+import sideBar1 from "@/components/sideBar.vue";
+import sideBar2 from "@/components/sideBar2.vue";
+import _local from '@/plugins/localStorage.js';
+
 export default {
+     data () {
+     return {
+       sideBar1: 'sideBar1',
+       sideBar2: 'sideBar2',
+       sideBar: 'sideBar1' 
+     };
+   },
+
+
   components: {
     Header,
-    sideBar
+    sideBar1,
+    sideBar2,
+  },
+
+  mounted() {
+    this.getSidebar();
+  },
+
+  methods:{
+    getSidebar(){
+      const iden=_local.get('identity')
+     // console.log(iden);
+     
+      if(iden){this.sideBar = sideBar1;}
+      else if(iden == false){this.sideBar = sideBar2;}
+
+      
+    }
+      
+    }
+
   }
-};
+
+  
+
+
+
 </script>
 <style>
 * {

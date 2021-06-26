@@ -14,8 +14,8 @@
             <!-- 添加角色按钮区域 -->
             <el-row>
               <el-col>
-                <el-button type="primary">
-                  <nuxt-link to="/role/create">添加角色</nuxt-link>
+                <el-button type="primary"  @click="toAdd()">
+                  添加角色
                 </el-button>
               </el-col>
             </el-row>
@@ -147,6 +147,9 @@ export default {
         return "";
       }
       return moment(date).format("YYYY-MM-DD HH:mm:ss");
+    },
+    toAdd(){
+      this.$router.push("/role/create");
     },
     // 获取所有角色的列表
     async getRolesList() {

@@ -91,6 +91,7 @@ export default {
         const { data: res } = await this.$axios.post(
           "/user/create",
           qs.stringify(this.addForm)
+         // this.addForm
         );
         console.log(res);
         if (res.code != 200) {
