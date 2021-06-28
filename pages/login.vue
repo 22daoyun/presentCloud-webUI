@@ -401,12 +401,18 @@ export default {
               .then(res => {
                 console.log(res);
                 
-                if (res.data.code !== 0) {
+                if (res.data.code !== 0 ) {
                 this.$message({
                   message: res.data.msg,
                   type: "error"
                     });
-                  } else {
+                  } else if(res.data.user.identity ==2){
+                    this.$message({
+                              showClose: true,
+                              message: '您没有权限',
+                              type: 'error'
+                            });}
+                  else {
                     this.$message({
                       message: res.data.msg,
                       type: "success"

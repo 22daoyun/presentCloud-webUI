@@ -46,8 +46,8 @@ export default {
       const iden=_local.get('identity')
      // console.log(iden);
      
-      if(iden){this.sideBar = sideBar1;}
-      else if(iden == false){this.sideBar = sideBar2;}
+      if(iden == 0){this.sideBar = sideBar1;}
+      else if(iden == 1){this.sideBar = sideBar2;}
 
       
     }
