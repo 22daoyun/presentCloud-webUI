@@ -51,6 +51,7 @@ export default {
   methods: {
     logout() {
       window.localStorage.removeItem("sid");
+      window.localStorage.removeItem("identity");
       // this.$cookies.remove("sid");
       this.$router.push("/login");
     }

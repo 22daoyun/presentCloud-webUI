@@ -92,7 +92,7 @@
           >
             <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="70px">
               <el-form-item label="用户名" prop="name">
-                <el-input v-model="editForm.name"></el-input>
+                <el-input v-model="editForm.name" disabled></el-input>
               </el-form-item>
               <el-form-item label="手机" prop="phone">
                 <el-input v-model="editForm.phone"></el-input>
@@ -167,10 +167,8 @@ export default {
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
           {
-            min: 3,
-            max: 20,
-            message: "用户名的长度在3~20个字符之间",
-            trigger: "blur"
+            
+          
           }
         ],
         password: [

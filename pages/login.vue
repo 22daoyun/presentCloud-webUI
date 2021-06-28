@@ -266,7 +266,7 @@ export default {
       accountHistory: [],
       formPsd: {
 
-        account: "15659197520",
+        account: "15900000001",
         password: "123456",
         autoLogin: false
 
@@ -280,7 +280,7 @@ export default {
       },
 
       formPhone: {
-        phone: '15659197520',
+        phone: '',
         verification: '', // 验证码
         need_vercode: '',
         disableVerify: true, // 能否发送

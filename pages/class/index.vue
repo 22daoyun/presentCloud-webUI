@@ -72,7 +72,7 @@
               @close="editDialogClosed"
             >
               <el-form :model="editForm" ref="editFormRef" label-width="70px">
-                <el-form-item label="班课ID">
+                <el-form-item label="班课号">
                   <el-input v-model="editForm.classesId" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="班课名">
@@ -99,10 +99,10 @@
               <el-table :data="studentList" border stripe>
                 <!-- 索引列 -->
                 <el-table-column type="index" label="#"></el-table-column>
-                <el-table-column label="学生id" prop="userId"></el-table-column>
-                <el-table-column label="姓名" prop="name"></el-table-column>
-                <el-table-column label="性别" prop="sex"></el-table-column>
-                <el-table-column label="手机号码" prop="tel"></el-table-column>
+                <!-- <el-table-column label="学生id" prop="userId"></el-table-column> -->
+                <el-table-column label="姓名" prop="nickname"></el-table-column>
+                <el-table-column label="学号" prop="schoolNumber"></el-table-column>
+                <el-table-column label="手机号码" prop="studentName"></el-table-column>
               </el-table>
             </el-dialog>
           </div>
